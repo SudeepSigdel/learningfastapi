@@ -1,2 +1,1 @@
-# learningfastapi
-These are the codes I wrote while learning fastapi.
+These are the practice projects/code snippets I wrote while I was learning fastapi from the basic. Here, I learn to perform basic CRUD operations, using different python modules to interact with database as well as perform authentications. I learnt a lot about Web APIs, how they work in the background and how we can create one ourself. 
