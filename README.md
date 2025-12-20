@@ -1,0 +1,1 @@
+On Day One, I learnt about basic initialization of FastAPI, Working with endpoints, Different kind of HTTP requests and responses, and we created a pseudo database using list and operated different operations on it.
