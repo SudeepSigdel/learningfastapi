@@ -1,1 +1,3 @@
-These are the practice projects/code snippets I wrote while I was learning fastapi from the basic. Here, I learn to perform basic CRUD operations, using different python modules to interact with database as well as perform authentications. I learnt a lot about Web APIs, how they work in the background and how we can create one ourself. 
+I have built APIs for a basic social media platform that has users, posts and votes.
+You can check it's docs out at:
+[Link Text](https://social-media-api-0v2w.onrender.com/docs#/)
