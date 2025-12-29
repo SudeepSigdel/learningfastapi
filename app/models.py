@@ -45,7 +45,9 @@ class PostResponse(PostBase):
     owner_id : int
     owner: UserResponse
 
-
+class PostOut(SQLModel):
+    Post: PostResponse
+    votes: int
 
 class Token(SQLModel):
     access_token : str
@@ -53,3 +55,12 @@ class Token(SQLModel):
 
 class TokenData(SQLModel):
     id : int
+
+class VoteInput(SQLModel):
+    post_id: int
+    direction: int=Field(ge=0, le=1)
+
+class Vote(SQLModel, table=True):
+    __tablename__="votes"#type:ignore
+    post_id: int=Field(sa_column=Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True))
+    user_id: int=Field(sa_column=Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True))
