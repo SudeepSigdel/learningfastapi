@@ -1,21 +1,21 @@
 from fastapi import APIRouter, HTTPException, status, Response, Depends
 from .. import models, oauth2, database
 from typing import Optional, List
-from sqlmodel import select
+from sqlmodel import select, func
 
 router = APIRouter(
     prefix="/posts",
     tags=['Post']
 )
 
-@router.get("/", response_model=List[models.PostResponse])
-def get_posts(db: database.SessionLocal, current_user= Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str]=''):
-    posts = db.exec(select(models.Post).where(models.Post.title.contains(search)).limit(limit).offset(skip)).all() #type: ignore
+@router.get("/", response_model=List[models.PostOut])
+def get_posts(db: database.SessionLocal, limit: int = 10, skip: int = 0, search: Optional[str]=''):
+    posts = db.exec(select(models.Post, func.count(models.Vote.post_id).label("votes")).join(models.Vote, onclause=models.Post.id == models.Vote.post_id, isouter=True).group_by(models.Post.id).where(models.Post.title.contains(search)).limit(limit).offset(skip)).all() #type: ignore
     return posts
 
-@router.get("/{id}", response_model=models.PostResponse)
-def get_post_by_id(db: database.SessionLocal, id: int, current_user= Depends(oauth2.get_current_user)):
-    post = db.get(models.Post, id)
+@router.get("/{id}", response_model=models.PostOut)
+def get_post_by_id(db: database.SessionLocal, id: int):
+    post = db.exec(select(models.Post, func.count(models.Vote.post_id).label("votes")).join(models.Vote, onclause=models.Post.id == models.Vote.post_id, isouter=True).group_by(models.Post.id).where(models.Post.id == id)).first()#type:ignore
     if post == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id:{id} Not found")
     

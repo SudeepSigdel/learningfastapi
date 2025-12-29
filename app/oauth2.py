@@ -3,12 +3,13 @@ from datetime import datetime, timedelta
 from . import models, database
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from .config import setting
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl= "login")
 
-SECRET_KEY = "4f80f907b4a763a4b8d168e0359bce2a316d030c12c7cc3a4800f67bf1aa7336"
-ALGORTIHM = "HS256"
-EXPIRATION_TIME = 30
+SECRET_KEY = setting.secret_key
+ALGORTIHM = setting.algorithm
+EXPIRATION_TIME = setting.token_expiration_time
 
 def create_token(payload: dict):
     expire =  datetime.utcnow() + timedelta(minutes= EXPIRATION_TIME)
